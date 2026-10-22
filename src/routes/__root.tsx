@@ -44,6 +44,7 @@ export const Route = createRootRoute({
     // same page in every language.
     const pathname = matches.at(-1)?.pathname ?? '/'
     const origin = getUrlOrigin()
+    const canonical = origin + localizeHref(pathname)
     const alternates = locales.map(hreflang => ({
       rel: 'alternate',
       hrefLang: hreflang,
@@ -60,7 +61,16 @@ export const Route = createRootRoute({
         { title: m.site_title() },
         { name: 'description', content: m.meta_description() },
         { name: 'theme-color', content: '#c8414c' },
+        // Child routes' tags with the same name/property win
         { property: 'og:site_name', content: m.site_title() },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: canonical },
+        // Title card rendered by scripts/gen-og.ts; photo pages use the photo
+        { property: 'og:image', content: `${origin}/og/${locale}.png` },
+        { property: 'og:image:type', content: 'image/png' },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { name: 'twitter:card', content: 'summary_large_image' },
       ],
       links: [
         { rel: 'stylesheet', href: appCss },
@@ -68,7 +78,7 @@ export const Route = createRootRoute({
         { rel: 'icon', href: '/favicon.ico', sizes: '32x32' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' },
-        { rel: 'canonical', href: origin + localizeHref(pathname) },
+        { rel: 'canonical', href: canonical },
         ...alternates,
         // Bare paths redirect to the visitor's preferred language
         { rel: 'alternate', hrefLang: 'x-default', href: origin + pathname },

@@ -48,6 +48,7 @@ and continue interrupted ones.
 | `pnpm images [--limit N]` | render thumbnails and viewer images            |
 | `pnpm gen:data`           | rebuild `src/data/album.json` from the archive |
 | `pnpm gen:files`          | rebuild `public/files.json` from the archive   |
+| `pnpm gen:og`             | render the per-language preview images         |
 | `pnpm restore`            | rebuild `archive/` from the originals          |
 
 The image and data scripts read `archive/` by default; pass another

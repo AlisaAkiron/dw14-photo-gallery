@@ -15,6 +15,7 @@
     "images": "node scripts/build-images.ts",
     "gen:data": "node scripts/gen-data.ts",
     "gen:files": "node scripts/gen-files.ts",
+    "gen:og": "node scripts/gen-og.ts",
     "restore": "node scripts/restore-archive.ts"
   },
   "dependencies": {

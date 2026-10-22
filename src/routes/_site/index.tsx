@@ -50,7 +50,6 @@ export const Route = createFileRoute('/_site/')({
       { title: `${m.site_title()} — ${m.site_subtitle()}` },
       { property: 'og:title', content: m.site_title() },
       { property: 'og:description', content: m.meta_description() },
-      { property: 'og:type', content: 'website' },
     ],
   }),
   component: RouteComponent,
