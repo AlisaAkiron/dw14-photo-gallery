@@ -28,7 +28,8 @@ pnpm restore --download-near-fifty-gigabyte-from-public-url   # or download them
 
 Every file is checked against its SHA-256 in `public/files.json`, and a rerun
 resumes where it stopped. The folders and `photo_info.json` come from
-`data/photo_info.json`.
+`data/photo_info.json`, and each file's modified time is set to its shoot
+time, so every machine ends up with the same archive.
 
 | Script                    | Does                                           |
 | ------------------------- | ---------------------------------------------- |

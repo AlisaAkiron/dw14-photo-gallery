@@ -15,6 +15,10 @@
  * is moved into place, and files already in the archive that match are kept,
  * so an interrupted run resumes. photo_info.json comes from
  * data/photo_info.json (committed by gen-data.ts).
+ *
+ * Every file's modified time is set to its shoot time from photo_info.json
+ * (the EXIF time, or the upload time for the few photos without one), so the
+ * archive is identical on every machine, timestamps included.
  */
 import { createHash } from 'node:crypto'
 import {
@@ -26,6 +30,7 @@ import {
   renameSync,
   rmSync,
   statSync,
+  utimesSync,
   writeFileSync,
 } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
@@ -72,13 +77,14 @@ const download = values[DOWNLOAD_FLAG] ?? false
 
 const manifest = readFileSync(join(root, 'data/photo_info.json'), 'utf8')
 const { photos } = JSON.parse(manifest) as {
-  photos: { path: string; photoId: number }[]
+  photos: { path: string; photoId: number; shootTime: string }[]
 }
 const { files } = JSON.parse(
   readFileSync(join(root, 'public/files.json'), 'utf8'),
 ) as { files: FileEntry[] }
 
 const pathOf = new Map(photos.map(p => [p.photoId, p.path]))
+const shotAt = new Map(photos.map(p => [p.photoId, new Date(p.shootTime)]))
 if (files.length !== photos.length || files.some(f => !pathOf.has(f.id))) {
   console.error(
     'public/files.json and data/photo_info.json list different photos — rerun gen:data and gen:files',
@@ -154,8 +160,7 @@ const fetchTo = async (entry: FileEntry, dest: string) => {
 
 type Outcome = 'kept' | 'copied' | 'downloaded' | 'missing'
 
-const restore = async (entry: FileEntry): Promise<Outcome> => {
-  const dest = join(outDir, pathOf.get(entry.id)!)
+const place = async (entry: FileEntry, dest: string): Promise<Outcome> => {
   if (await isIntact(dest, entry)) return 'kept'
   const local = join(sourceDir, entry.name)
   const copy = existsSync(local)
@@ -167,6 +172,16 @@ const restore = async (entry: FileEntry): Promise<Outcome> => {
   }
   await fetchTo(entry, dest)
   return 'downloaded'
+}
+
+const restore = async (entry: FileEntry) => {
+  const dest = join(outDir, pathOf.get(entry.id)!)
+  const outcome = await place(entry, dest)
+  if (outcome !== 'missing') {
+    const shot = shotAt.get(entry.id)!
+    utimesSync(dest, shot, shot)
+  }
+  return outcome
 }
 
 mkdirSync(outDir, { recursive: true })
