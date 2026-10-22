@@ -2,9 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "dw14-photo-gallery",
   "compatibility_date": "2026-10-01",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
   // Our own entry (Paraglide middleware around Start's handler). The
   // package's "@tanstack/react-start/server-entry" export is Start's bare
   // default entry and would bypass src/server.ts entirely.

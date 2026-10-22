@@ -1,5 +1,12 @@
 import { Link } from '@tanstack/react-router'
 import { GitHubIcon } from '@/components/ui/button'
+import {
+  DERIVATIVE_BYTES,
+  objectCount,
+  PRICES_CHECKED,
+  R2,
+  WORKERS,
+} from '@/config/hosting'
 import { REPO_URL } from '@/config/site'
 import type { Photographer, SetKey } from '@/lib/album/types'
 import { formatNumber, setDescription, setName } from '@/lib/i18n'
@@ -49,6 +56,121 @@ const ExternalLink = ({
     {children}
   </a>
 )
+
+/** Cloudflare's prices next to what this site uses (the $5 plan left out) */
+const CostTable = ({ data }: { data: AboutData }) => {
+  const locale = getLocale()
+  // Prices go down to $0.015; amounts are whole cents, and nothing is $0
+  const usd = (value: number, maximumFractionDigits = 3) =>
+    new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: value === 0 ? 0 : 2,
+      maximumFractionDigits,
+    }).format(value)
+  const cost = (value: number) => usd(value, 2)
+  const gb = (value: number) =>
+    new Intl.NumberFormat(locale, {
+      style: 'unit',
+      unit: 'gigabyte',
+      maximumFractionDigits: 1,
+    }).format(value)
+  const millions = (value: number) =>
+    new Intl.NumberFormat(locale, {
+      notation: 'compact',
+      compactDisplay: 'long',
+    }).format(value)
+  const month = new Intl.DateTimeFormat(locale, {
+    year: 'numeric',
+    month: 'long',
+    timeZone: 'UTC',
+  }).format(new Date(PRICES_CHECKED))
+
+  const storedGb = (data.originalBytes + DERIVATIVE_BYTES) / 1e9
+  const storageCost = Math.max(0, storedGb - R2.freeGb) * R2.perGbMonth
+  const zero = cost(0)
+  const free = m.about_cost_within_free({ zero })
+
+  const rows = [
+    [
+      m.about_cost_storage(),
+      gb(R2.freeGb),
+      m.about_cost_per_gb_month({ price: usd(R2.perGbMonth) }),
+      m.about_cost_stored({ size: gb(storedGb), cost: cost(storageCost) }),
+    ],
+    [
+      m.about_cost_reads(),
+      millions(R2.freeReads),
+      m.about_cost_per_million({ price: usd(R2.perMillionReads) }),
+      free,
+    ],
+    [
+      m.about_cost_writes(),
+      millions(R2.freeWrites),
+      m.about_cost_per_million({ price: usd(R2.perMillionWrites) }),
+      m.about_cost_uploaded({
+        count: formatNumber(objectCount(data.total), locale),
+        zero,
+      }),
+    ],
+    [m.about_cost_egress(), m.about_cost_unlimited(), '—', zero],
+    [
+      m.about_cost_requests(),
+      millions(WORKERS.freeRequests),
+      m.about_cost_per_million({ price: usd(WORKERS.perMillionRequests) }),
+      free,
+    ],
+    [
+      m.about_cost_cpu(),
+      m.about_cost_ms({ amount: millions(WORKERS.freeCpuMs) }),
+      m.about_cost_per_million_ms({ price: usd(WORKERS.perMillionCpuMs) }),
+      free,
+    ],
+    [m.about_cost_assets(), m.about_cost_unlimited(), '—', zero],
+  ]
+
+  return (
+    <>
+      <div className="overflow-x-auto rounded-box border border-base-300">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>{m.about_cost_col_item()}</th>
+              <th>{m.about_cost_col_free()}</th>
+              <th>{m.about_cost_col_beyond()}</th>
+              <th>{m.about_cost_col_now()}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(([item, ...cells]) => (
+              <tr key={item}>
+                <th className="font-medium text-base-content">{item}</th>
+                {cells.map((cell, i) => (
+                  <td key={i} className="tabular-nums">
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colSpan={3} className="text-base-content">
+                {m.about_cost_total()}
+              </th>
+              <td className="font-bold tabular-nums text-base-content">
+                {m.about_cost_month({ cost: cost(storageCost) })}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <p className="text-sm text-base-content/60">
+        {m.about_cost_note({ date: month })}
+      </p>
+    </>
+  )
+}
 
 export const AboutPage = ({ data }: { data: AboutData }) => {
   const locale = getLocale()
@@ -150,6 +272,8 @@ export const AboutPage = ({ data }: { data: AboutData }) => {
         <Section title={m.about_hosting_title()}>
           <p>{m.about_hosting_body({ size: gigabytes })}</p>
           <p>{m.about_billing_body()}</p>
+          <CostTable data={data} />
+          <p>{m.about_self_host_body()}</p>
         </Section>
 
         <Section title={m.about_code_title()}>
