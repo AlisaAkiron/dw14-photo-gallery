@@ -31,6 +31,14 @@ resumes where it stopped. The folders and `photo_info.json` come from
 `data/photo_info.json`, and each file's modified time is set to its shoot
 time, so every machine ends up with the same archive.
 
+To only download the photos, without the repo, use
+[`examples/download.sh`](examples/download.sh) (curl and jq) or
+[`examples/download.py`](examples/download.py) (Python, no dependencies).
+Run without arguments they only print help; downloading needs the same
+`--download-near-fifty-gigabyte-from-public-url` flag. Both save
+`<set>/<file name>`, check every SHA-256, and on a rerun skip finished files
+and continue interrupted ones.
+
 | Script                    | Does                                           |
 | ------------------------- | ---------------------------------------------- |
 | `pnpm dev`                | dev server                                     |

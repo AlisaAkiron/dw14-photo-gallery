@@ -13,6 +13,9 @@ import { formatNumber, setDescription, setName } from '@/lib/i18n'
 import { m } from '@/paraglide/messages.js'
 import { getLocale } from '@/paraglide/runtime.js'
 
+/** The scripts in examples/ only download with this, as does `pnpm restore` */
+const DOWNLOAD_FLAG = '--download-near-fifty-gigabyte-from-public-url'
+
 export type AboutData = {
   total: number
   /** Photos whose time may be an export time */
@@ -247,6 +250,26 @@ export const AboutPage = ({ data }: { data: AboutData }) => {
               files.json
             </a>
           </p>
+          <p>{m.about_scripts_body({ size: gigabytes })}</p>
+          <ul className="flex flex-col gap-1">
+            {[
+              ['download.sh', m.about_scripts_sh()],
+              ['download.py', m.about_scripts_py()],
+            ].map(([file, note]) => (
+              <li key={file}>
+                <ExternalLink href={`${REPO_URL}/blob/main/examples/${file}`}>
+                  {file} ↗
+                </ExternalLink>{' '}
+                <span className="text-base-content/60">— {note}</span>
+              </li>
+            ))}
+          </ul>
+          <p>{m.about_scripts_flag()}</p>
+          <pre className="overflow-x-auto rounded-box bg-base-200 px-4 py-3 text-sm text-base-content">
+            <code>
+              {`./download.sh ${DOWNLOAD_FLAG}\npython3 download.py ${DOWNLOAD_FLAG}`}
+            </code>
+          </pre>
         </Section>
 
         <Section title={m.about_usage_title()}>
