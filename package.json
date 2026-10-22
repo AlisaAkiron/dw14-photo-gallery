@@ -1,0 +1,51 @@
+{
+  "name": "dw14-photo-gallery",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build && tsc -b --noEmit",
+    "preview": "vite preview",
+    "deploy": "pnpm build && wrangler deploy",
+    "lint": "oxlint",
+    "format": "oxfmt --write .",
+    "cf-typegen": "wrangler types --include-env false",
+    "images": "node scripts/build-images.ts",
+    "gen:data": "node scripts/gen-data.ts",
+    "gen:files": "node scripts/gen-files.ts",
+    "restore": "node scripts/restore-archive.ts"
+  },
+  "dependencies": {
+    "@mantine/hooks": "^9.7.3",
+    "@tanstack/react-router": "^1.170.45",
+    "@tanstack/react-start": "^1.169.3",
+    "@tanstack/react-virtual": "^3.14.21",
+    "clsx": "^2.1.1",
+    "misans": "^5.0.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwind-merge": "^3.7.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.64.0",
+    "@inlang/paraglide-js": "^2.29.1",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "daisyui": "^5.7.50",
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
+    "postcss": "^8.5.31",
+    "react-scan": "^0.5.7",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "wrangler": "^4.151.3"
+  },
+  "packageManager": "pnpm@12.11.2"
+}

@@ -1,0 +1,16 @@
+{
+  "semi": false,
+  "singleQuote": true,
+  "jsxSingleQuote": false,
+  "bracketSameLine": false,
+  "trailingComma": "all",
+  "arrowParens": "avoid",
+  "printWidth": 80,
+  "ignorePatterns": [
+    "src/paraglide",
+    "src/routeTree.gen.ts",
+    "src/data",
+    "public/files.json",
+    "data/photo_info.json"
+  ]
+}

@@ -1,0 +1,40 @@
+@import './tailwind.css';
+
+/* Thumbnails fade in over their dominant-colour placeholder — quickly:
+   while flinging through the grid, a long fade reads as slow loading.
+   Images already in cache are marked loaded before first paint and skip
+   the fade entirely (markLoaded in PhotoThumb). */
+.photo-thumb img {
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+}
+.photo-thumb img[data-loaded] {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .photo-thumb img {
+    transition: none;
+  }
+}
+
+/* Hide scrollbars on horizontally scrolling chip rows (still scrollable) */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Viewer image fades in over the (already cached) thumbnail */
+.viewer-image {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.viewer-image[data-loaded] {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .viewer-image {
+    transition: none;
+  }
+}

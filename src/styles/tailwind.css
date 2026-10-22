@@ -1,0 +1,155 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* Theme *mode* (the stored choice, incl. auto) — set on <html> pre-paint by
+   the head script in routes/__root.tsx and kept current by ThemeProvider.
+   Lets ThemeSwitch show the active mode without theme-dependent SSR markup. */
+@custom-variant theme-light (&:where([data-theme-mode=light] *));
+@custom-variant theme-auto (&:where([data-theme-mode=auto] *));
+@custom-variant theme-dark (&:where([data-theme-mode=dark] *));
+
+/*
+ * Text faces per language. routes/__root.tsx links only the MiSans
+ * stylesheet the page's language needs (unicode-range chunks, so only
+ * rendered glyphs download):
+ * - en, zh-Hans: MiSans VF (Simplified Chinese glyph forms)
+ * - zh-Hant: MiSansTC VF (Traditional forms)
+ * - ja: no web font — MiSans would draw kanji in Chinese glyph forms, so
+ *   Japanese uses the platform's Japanese UI face.
+ * --font-sans drives Tailwind preflight's document font.
+ */
+@theme {
+  --font-sans:
+    'MiSans VF', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+:root:lang(zh-Hant) {
+  --font-sans:
+    'MiSansTC VF', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+:root:lang(ja) {
+  --font-sans:
+    system-ui, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP',
+    'Yu Gothic UI', Meiryo, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Noto Color Emoji';
+}
+
+/*
+ * A photo archive: the page stays out of the photos' way — white (light)
+ * or near-black (dark) ground, hairline borders instead of boxed cards,
+ * and DW 14's red used only as the accent. #c8414c is the logo red
+ * (#db4a52) deepened enough for 4.5:1 with white text.
+ */
+/* themes: false — only the two custom theme blocks below exist, so the
+   built-in light theme can never override them on [data-theme=light]. */
+@plugin "daisyui" {
+  themes: false;
+}
+@plugin "daisyui/theme" {
+  name: 'light';
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: #ffffff;
+  --color-base-200: #f6f4f4;
+  --color-base-300: #e7e2e3;
+  --color-base-content: #1f1a1b;
+
+  --color-primary: #c8414c;
+  --color-primary-content: #ffffff;
+
+  --color-secondary: #f4c4c6;
+  --color-secondary-content: #5b1a22;
+
+  --color-accent: #9a2c37;
+  --color-accent-content: #ffffff;
+
+  --color-neutral: #2d2326;
+  --color-neutral-content: #f3e9ea;
+
+  --color-info: #3b6fb6;
+  --color-info-content: #ffffff;
+
+  --color-success: #2f7d55;
+  --color-success-content: #ffffff;
+
+  --color-warning: #a8740f;
+  --color-warning-content: #ffffff;
+
+  --color-error: #b3261e;
+  --color-error-content: #ffffff;
+
+  --radius-box: 0.75rem;
+  --radius-field: 999px;
+  --radius-selector: 999px;
+}
+
+@plugin "daisyui/theme" {
+  name: 'dark';
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: #131112;
+  --color-base-200: #1c191a;
+  --color-base-300: #2f2a2b;
+  --color-base-content: #f1ecec;
+
+  --color-primary: #f07c85;
+  --color-primary-content: #2b0a0f;
+
+  --color-secondary: #6e2a34;
+  --color-secondary-content: #fbe3e5;
+
+  --color-accent: #f5a8ae;
+  --color-accent-content: #2b0a0f;
+
+  --color-neutral: #120d0f;
+  --color-neutral-content: #f3e9ea;
+
+  --color-info: #8fb4ea;
+  --color-info-content: #0d1a2b;
+
+  --color-success: #7fd1a6;
+  --color-success-content: #0b2418;
+
+  --color-warning: #f0c35f;
+  --color-warning-content: #2b1d03;
+
+  --color-error: #ff8a80;
+  --color-error-content: #2b0705;
+
+  --radius-box: 0.75rem;
+  --radius-field: 999px;
+  --radius-selector: 999px;
+}
+
+/* Theme-switch circular reveal, scoped via view transition types so only
+   theme changes get it. ThemeSwitch sets the --theme-transition-* vars on
+   the root and starts a 'theme-change' transition; the default cross-fade
+   is disabled because it would wash out the expanding circle's edge. */
+:active-view-transition-type(theme-change)::view-transition-old(root),
+:active-view-transition-type(theme-change)::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:active-view-transition-type(theme-change)::view-transition-new(root) {
+  clip-path: circle(
+    0px at var(--theme-transition-x, 50%) var(--theme-transition-y, 50%)
+  );
+  animation: theme-reveal 0.5s ease-out forwards;
+}
+
+@keyframes theme-reveal {
+  to {
+    clip-path: circle(
+      var(--theme-transition-radius, 100vmax) at var(--theme-transition-x, 50%)
+        var(--theme-transition-y, 50%)
+    );
+  }
+}

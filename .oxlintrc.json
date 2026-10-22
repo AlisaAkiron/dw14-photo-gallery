@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "jsx-a11y"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "typescript/no-non-null-assertion": "off",
+    "jsx-a11y/prefer-tag-over-role": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/mouse-events-have-key-events": "off",
+    "jsx-a11y/no-noninteractive-tabindex": "off",
+    "react/button-has-type": "off",
+    "typescript/no-invalid-void-type": "off",
+    "no-array-index-key": "off",
+    "react/no-unknown-property": "off",
+    "react/react-in-jsx-scope": "off"
+  },
+  "ignorePatterns": [
+    "src/styles/tailwind.css",
+    "src/vite-env.d.ts",
+    "src/paraglide",
+    "src/routeTree.gen.ts"
+  ]
+}
