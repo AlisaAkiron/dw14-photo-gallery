@@ -14,8 +14,14 @@ export type Selection = {
 
 const STORAGE_KEY = 'dw14-selection'
 
-/** Most photos one selection may hold */
-export const MAX_SELECTION = 20
+/** Most photos one selection may hold (their links can still be copied) */
+export const MAX_SELECTION = 100
+
+/**
+ * Most photos the tray downloads in the browser: one download per file, so
+ * more is better left to a download manager or the About page's scripts
+ */
+export const MAX_DOWNLOAD = 20
 
 const makeSelection = (ids: readonly number[]): Selection => {
   const set = new Set(ids)

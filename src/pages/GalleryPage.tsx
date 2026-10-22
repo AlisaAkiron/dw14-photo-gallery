@@ -1,18 +1,21 @@
+import { Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FilterBar } from '@/components/gallery/FilterBar'
 import { JustifiedGrid } from '@/components/gallery/JustifiedGrid'
 import { SelectionTray } from '@/components/gallery/SelectionTray'
 import type { Facets, GallerySearch } from '@/lib/album/filters'
 import {
+  MAX_DOWNLOAD,
   MAX_SELECTION,
   addSelected,
   toggleSelected,
   useSelection,
 } from '@/lib/album/selection'
 import type { GridPhoto, Photographer } from '@/lib/album/types'
-import { setDescription } from '@/lib/i18n'
+import { sentenceGap, setDescription } from '@/lib/i18n'
 import { galleryTitle } from '@/lib/i18n/titles'
 import { m } from '@/paraglide/messages.js'
+import { getLocale } from '@/paraglide/runtime.js'
 import { cn } from '@/utils/cn'
 
 type GalleryPageProps = {
@@ -119,6 +122,17 @@ export const GalleryPage = ({
           {full
             ? m.selection_full({ max: MAX_SELECTION })
             : m.select_hint({ max: MAX_SELECTION })}
+          <span className="mt-1 block text-base-content/60">
+            {m.select_limits({ download: MAX_DOWNLOAD })}
+            {sentenceGap(getLocale())}
+            <Link
+              to="/about"
+              hash="downloads"
+              className="link font-medium text-primary"
+            >
+              {m.select_all_photos()}
+            </Link>
+          </span>
         </p>
       )}
 

@@ -42,5 +42,8 @@ export const formatBytes = (bytes: number, locale: Locale) =>
         maximumFractionDigits: 1,
       }).format(bytes / 1e6)
 
+/** Between two sentences: a space in English, nothing after CJK punctuation */
+export const sentenceGap = (locale: Locale) => (locale === 'en' ? ' ' : '')
+
 export const formatNumber = (n: number, locale: Locale) =>
   new Intl.NumberFormat(locale).format(n)

@@ -29,13 +29,17 @@ export type AboutData = {
 }
 
 const Section = ({
+  id,
   title,
   children,
 }: {
+  /** Anchor for links into the page */
+  id?: string
   title: string
   children: React.ReactNode
 }) => (
-  <section className="border-t border-base-300 pt-8">
+  // scroll-mt: clear the sticky header when jumped to
+  <section id={id} className="scroll-mt-20 border-t border-base-300 pt-8">
     <h2 className="text-xl font-bold">{title}</h2>
     <div className="mt-3 flex flex-col gap-4 leading-relaxed text-base-content/80">
       {children}
@@ -241,7 +245,7 @@ export const AboutPage = ({ data }: { data: AboutData }) => {
           </p>
         </Section>
 
-        <Section title={m.about_downloads_title()}>
+        <Section id="downloads" title={m.about_downloads_title()}>
           <p>{m.about_downloads_body()}</p>
           <p>{m.about_files_body()}</p>
           <p>

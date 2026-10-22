@@ -4,13 +4,14 @@ import { thumbUrl } from '@/config/images'
 import { downloadOriginals, originalLinks } from '@/lib/album/download'
 import { indexAlbum, loadAlbum } from '@/lib/album/load'
 import {
+  MAX_DOWNLOAD,
   MAX_SELECTION,
   clearSelected,
   removeSelected,
 } from '@/lib/album/selection'
 import type { Selection } from '@/lib/album/selection'
 import type { Photo } from '@/lib/album/types'
-import { formatBytes, formatNumber } from '@/lib/i18n'
+import { formatBytes, formatNumber, sentenceGap } from '@/lib/i18n'
 import { m } from '@/paraglide/messages.js'
 import { getLocale } from '@/paraglide/runtime.js'
 
@@ -99,9 +100,11 @@ export const SelectionTray = ({ selection }: { selection: Selection }) => {
     ? selection.ids.flatMap(id => index.get(id) ?? [])
     : undefined
   const totalBytes = photos?.reduce((sum, p) => sum + p.size, 0)
+  // Past the download limit only the links can be taken
+  const canDownload = count <= MAX_DOWNLOAD
 
   const download = async () => {
-    if (!photos?.length) return
+    if (!photos?.length || !canDownload) return
     const controller = new AbortController()
     abort.current = controller
     setProgress({ done: 0, total: photos.length })
@@ -225,7 +228,7 @@ export const SelectionTray = ({ selection }: { selection: Selection }) => {
               <button
                 type="button"
                 className="btn btn-primary btn-sm rounded-full"
-                disabled={!photos}
+                disabled={!photos || !canDownload}
                 onClick={download}
               >
                 <DownloadIcon />
@@ -235,6 +238,22 @@ export const SelectionTray = ({ selection }: { selection: Selection }) => {
           )}
         </div>
       </div>
+      {!canDownload && (
+        <p
+          aria-live="polite"
+          className="mx-auto max-w-[96rem] px-4 pb-3 text-sm text-base-content/70 lg:px-8"
+        >
+          {m.selection_over_download({ download: MAX_DOWNLOAD })}
+          {sentenceGap(locale)}
+          <Link
+            to="/about"
+            hash="downloads"
+            className="link font-medium text-primary"
+          >
+            {m.select_all_photos()}
+          </Link>
+        </p>
+      )}
     </section>
   )
 }
