@@ -80,4 +80,5 @@ no longer matches the archive.
 ## License
 
 The code is [MIT](LICENSE). The photos are not covered by it: they belong to
-their photographers, and the DW wordmark and favicon to Doll Weekend.
+their copyright holders, the event's photographers and Doll Weekend. The DW
+wordmark and favicon belong to Doll Weekend.

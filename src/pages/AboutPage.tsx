@@ -7,7 +7,7 @@ import {
   R2,
   WORKERS,
 } from '@/config/hosting'
-import { REPO_URL } from '@/config/site'
+import { CONTACT_EMAIL, REPO_URL } from '@/config/site'
 import type { Photographer, SetKey } from '@/lib/album/types'
 import { formatNumber, setDescription, setName } from '@/lib/i18n'
 import { m } from '@/paraglide/messages.js'
@@ -289,6 +289,30 @@ export const AboutPage = ({ data }: { data: AboutData }) => {
               {REPO_URL.replace(/^https:\/\//, '')}
             </a>
           </p>
+        </Section>
+
+        <Section title={m.about_contact_title()}>
+          <p>{m.about_contact_body()}</p>
+          <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-6 gap-y-2">
+            <dt className="text-base-content/60">{m.about_contact_issues()}</dt>
+            <dd className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 break-words">
+              <ExternalLink href={`${REPO_URL}/issues`}>
+                {`${REPO_URL}/issues`.replace(/^https:\/\//, '')} ↗
+              </ExternalLink>
+              <span className="badge badge-sm badge-primary badge-soft">
+                {m.about_contact_preferred()}
+              </span>
+            </dd>
+            <dt className="text-base-content/60">{m.about_contact_email()}</dt>
+            <dd>
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="link font-medium text-primary"
+              >
+                {CONTACT_EMAIL}
+              </a>
+            </dd>
+          </dl>
         </Section>
       </div>
     </div>
