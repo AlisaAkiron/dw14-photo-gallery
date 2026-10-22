@@ -103,6 +103,18 @@ sharp.concurrency(2)
 
 const hex = (n: number) => n.toString(16).padStart(2, '0')
 
+// Photos finish in any order, and ids this large keep insertion order in an
+// object, so sort them: the same photos then always give the same file
+const writeMeta = () =>
+  writeFileSync(
+    metaPath,
+    JSON.stringify(
+      Object.fromEntries(
+        Object.entries(meta).sort(([a], [b]) => Number(a) - Number(b)),
+      ),
+    ),
+  )
+
 const render = async ({ path, photoId }: { path: string; photoId: number }) => {
   const source = resolve(albumDir, path)
   // One decode (with JPEG shrink-on-load) to the view size; the thumbnail
@@ -169,7 +181,7 @@ const worker = async () => {
     done++
     if (done % 25 === 0 || done === todo.length) {
       // Checkpoint so an interrupted run resumes where it stopped
-      writeFileSync(metaPath, JSON.stringify(meta))
+      writeMeta()
       const rate = done / ((Date.now() - started) / 1000)
       process.stdout.write(
         `\r${done}/${todo.length} (${rate.toFixed(1)}/s, ${failed} failed)`,
@@ -180,6 +192,6 @@ const worker = async () => {
 
 console.log(`${photos.length} photos, ${todo.length} to render, ${jobs} jobs`)
 await Promise.all(Array.from({ length: jobs }, worker))
-writeFileSync(metaPath, JSON.stringify(meta))
+writeMeta()
 console.log(`\nDone in ${((Date.now() - started) / 1000).toFixed(0)}s`)
 if (failed) process.exit(1)

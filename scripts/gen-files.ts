@@ -76,6 +76,18 @@ const cache: HashCache = existsSync(cachePath)
   ? (JSON.parse(readFileSync(cachePath, 'utf8')) as HashCache)
   : {}
 
+// Files finish in any order, and ids this large keep insertion order in an
+// object, so sort them: the same archive then always gives the same file
+const writeCache = () =>
+  writeFileSync(
+    cachePath,
+    JSON.stringify(
+      Object.fromEntries(
+        Object.entries(cache).sort(([a], [b]) => Number(a) - Number(b)),
+      ),
+    ),
+  )
+
 const sha256Of = async (path: string) => {
   const hash = createHash('sha256')
   await pipeline(createReadStream(path), hash)
@@ -107,7 +119,7 @@ const worker = async () => {
     cache[photo.id] = { size, mtimeMs, sha256 }
     hashed.set(photo.id, sha256)
     if (++read % 50 === 0) {
-      writeFileSync(cachePath, JSON.stringify(cache))
+      writeCache()
       process.stdout.write(`\rHashed ${read} files`)
     }
   }
@@ -117,7 +129,7 @@ const worker = async () => {
 await Promise.all(
   Array.from({ length: Math.min(8, availableParallelism()) }, worker),
 )
-writeFileSync(cachePath, JSON.stringify(cache))
+writeCache()
 if (read) {
   console.log(
     `\rHashed ${read} files in ${((Date.now() - started) / 1000).toFixed(0)}s`,
