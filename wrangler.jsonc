@@ -10,6 +10,13 @@
   // default entry and would bypass src/server.ts entirely.
   "main": "./src/server.ts",
   "preview_urls": false,
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "gallery.dw14.alisaqaq.moe",
+      "custom_domain": true,
+    },
+  ],
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1,

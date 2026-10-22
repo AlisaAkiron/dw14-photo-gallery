@@ -35,7 +35,7 @@ time, so every machine ends up with the same archive.
 | ------------------------- | ---------------------------------------------- |
 | `pnpm dev`                | dev server                                     |
 | `pnpm build` / `preview`  | production build and type-check / serve it     |
-| `pnpm run deploy`         | build and deploy the Worker                    |
+| `pnpm run deploy`         | build and deploy the Worker (CI does this)     |
 | `pnpm lint` / `format`    | oxlint / oxfmt                                 |
 | `pnpm images [--limit N]` | render thumbnails and viewer images            |
 | `pnpm gen:data`           | rebuild `src/data/album.json` from the archive |
