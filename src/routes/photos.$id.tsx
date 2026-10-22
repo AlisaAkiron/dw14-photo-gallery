@@ -48,18 +48,22 @@ export const Route = createFileRoute('/photos/$id')({
     if (!loaderData) return {}
     const { photo, photographer } = loaderData
     const title = `${setName(photo.set)} · ${photographer.name} — ${m.site_title()}`
+    const date = formatDate(photo.t, getLocale())
     const description = m.photo_meta_description({
       photographer: photographer.name,
       set: setName(photo.set),
-      date: formatDate(photo.t, getLocale()),
+      date,
     })
+    // Link previews leave the photographer's name out (the page title and
+    // description keep it)
+    const ogTitle = `${setName(photo.set)} — ${m.site_title()}`
     const scale = Math.min(1, VIEW_SIZE / Math.max(photo.w, photo.h))
     return {
       meta: [
         { title },
         { name: 'description', content: description },
-        { property: 'og:title', content: title },
-        { property: 'og:description', content: description },
+        { property: 'og:title', content: ogTitle },
+        { property: 'og:description', content: `${photo.name} · ${date}` },
         { property: 'og:type', content: 'article' },
         {
           property: 'og:image',
