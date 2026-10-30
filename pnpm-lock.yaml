@@ -166,6 +166,12 @@ importers:
 
   .:
     dependencies:
+      '@fontsource-variable/noto-sans-jp':
+        specifier: ^5.3.1
+        version: 5.3.1
+      '@fontsource-variable/noto-sans-kr':
+        specifier: ^5.3.1
+        version: 5.3.1
       '@mantine/hooks':
         specifier: ^9.7.4
         version: 9.7.4(react@19.3.1)
@@ -652,6 +658,12 @@ packages:
   '@eslint/plugin-kit@0.7.3':
     resolution: {integrity: sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@fontsource-variable/noto-sans-jp@5.3.1':
+    resolution: {integrity: sha512-/anGvJFc5y36f8DJ+3TSh2+KAvaRLA9PaLUMvneeY5s4j8m+8X4F3lE/sjTuG9YI5BX4sykvCk4TuJMG7ecMRQ==}
+
+  '@fontsource-variable/noto-sans-kr@5.3.1':
+    resolution: {integrity: sha512-f5aty6Qgk2LVU5TjCtXHxiYHqUWYW8f75ll0Chn8ucCqoOlIomcACUwf1V47yUt6wTdWZiGr3dcbQk+zlOspMA==}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -3818,6 +3830,10 @@ snapshots:
     dependencies:
       '@eslint/core': 1.2.1
       levn: 0.4.1
+
+  '@fontsource-variable/noto-sans-jp@5.3.1': {}
+
+  '@fontsource-variable/noto-sans-kr@5.3.1': {}
 
   '@humanfs/core@0.19.2':
     dependencies:

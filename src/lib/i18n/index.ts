@@ -8,6 +8,7 @@ export const LOCALE_NAMES: Record<Locale, string> = {
   'zh-Hans': '简体中文',
   'zh-Hant': '繁體中文',
   ja: '日本語',
+  ko: '한국어',
 }
 
 const SET_MESSAGES: Record<SetKey, { name: () => string; desc: () => string }> =
@@ -42,8 +43,12 @@ export const formatBytes = (bytes: number, locale: Locale) =>
         maximumFractionDigits: 1,
       }).format(bytes / 1e6)
 
-/** Between two sentences: a space in English, nothing after CJK punctuation */
-export const sentenceGap = (locale: Locale) => (locale === 'en' ? ' ' : '')
+/**
+ * Between two sentences: a space in English and Korean (which ends
+ * sentences with a Latin period), nothing after CJK full-width punctuation
+ */
+export const sentenceGap = (locale: Locale) =>
+  locale === 'en' || locale === 'ko' ? ' ' : ''
 
 export const formatNumber = (n: number, locale: Locale) =>
   new Intl.NumberFormat(locale).format(n)

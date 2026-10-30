@@ -19,6 +19,8 @@ import { ThemeProvider } from '@/providers/ThemeProvider'
 import appCss from '@/styles/index.css?url'
 import miSansCss from 'misans/lib/Normal/MiSansVF.min.css?url'
 import miSansTcCss from 'misans/lib/TC/MiSansTCVF.min.css?url'
+import notoSansJpCss from '@fontsource-variable/noto-sans-jp?url'
+import notoSansKrCss from '@fontsource-variable/noto-sans-kr?url'
 
 // Applies the persisted theme before first paint so a stored choice that
 // differs from the OS preference doesn't flash the wrong theme. data-theme
@@ -30,16 +32,17 @@ import miSansTcCss from 'misans/lib/TC/MiSansTCVF.min.css?url'
 const themeInitScript = `(function(){var m;try{m=JSON.parse(localStorage.getItem('dw14-theme'))}catch(e){}if(m!=='light'&&m!=='dark'&&m!=='auto'){m='auto'}var t=m==='auto'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):m;var r=document.documentElement;r.setAttribute('data-theme',t);r.setAttribute('data-theme-mode',m)})()`
 
 // Only the face the page's language renders with (see tailwind.css)
-const FONT_CSS: Partial<Record<Locale, string>> = {
+const FONT_CSS: Record<Locale, string> = {
   en: miSansCss,
   'zh-Hans': miSansCss,
   'zh-Hant': miSansTcCss,
+  ja: notoSansJpCss,
+  ko: notoSansKrCss,
 }
 
 export const Route = createRootRoute({
   head: ({ matches }) => {
     const locale = getLocale()
-    const fontCss = FONT_CSS[locale]
     // Routes are locale-free internally; the leaf match's pathname is the
     // same page in every language.
     const pathname = matches.at(-1)?.pathname ?? '/'
@@ -74,7 +77,7 @@ export const Route = createRootRoute({
       ],
       links: [
         { rel: 'stylesheet', href: appCss },
-        ...(fontCss ? [{ rel: 'stylesheet', href: fontCss }] : []),
+        { rel: 'stylesheet', href: FONT_CSS[locale] },
         { rel: 'icon', href: '/favicon.ico', sizes: '32x32' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' },

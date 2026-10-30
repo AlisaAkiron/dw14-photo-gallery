@@ -2,7 +2,7 @@
 
 Photo archive for **Doll Weekend 14** (Aug 21–23, 2026, Huizhou): all 3,058
 photos from the event's live album, browsable by day, hour, set and
-photographer, in English, 简体中文, 繁體中文 and 日本語.
+photographer, in English, 简体中文, 繁體中文, 日本語 and 한국어.
 
 Built with TanStack Start on Cloudflare Workers. Photos are served from
 Cloudflare R2.

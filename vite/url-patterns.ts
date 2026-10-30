@@ -12,6 +12,7 @@ const prefixes = {
   'zh-Hans': 'zh-hans',
   'zh-Hant': 'zh-hant',
   ja: 'ja',
+  ko: 'ko',
 } as const
 
 export const urlPatterns = [

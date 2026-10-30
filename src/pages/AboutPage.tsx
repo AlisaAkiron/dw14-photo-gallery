@@ -1,4 +1,6 @@
 import { Link } from '@tanstack/react-router'
+import { TocInline, TocSidebar } from '@/components/shared/Toc'
+import type { TocEntry } from '@/components/shared/Toc'
 import { GitHubIcon } from '@/components/ui/button'
 import {
   DERIVATIVE_BYTES,
@@ -33,8 +35,8 @@ const Section = ({
   title,
   children,
 }: {
-  /** Anchor for links into the page */
-  id?: string
+  /** Anchor for the ToC and links into the page */
+  id: string
   title: string
   children: React.ReactNode
 }) => (
@@ -188,160 +190,197 @@ export const AboutPage = ({ data }: { data: AboutData }) => {
     maximumFractionDigits: 0,
   }).format(data.originalBytes / 1e9)
 
+  // In page order; ids match the Sections below
+  const toc: TocEntry[] = [
+    { id: 'event', title: m.about_event_title() },
+    { id: 'source', title: m.about_source_title() },
+    { id: 'sets', title: m.about_sets_title() },
+    { id: 'times', title: m.about_times_title() },
+    { id: 'downloads', title: m.about_downloads_title() },
+    { id: 'usage', title: m.about_usage_title() },
+    { id: 'hosting', title: m.about_hosting_title() },
+    { id: 'code', title: m.about_code_title() },
+    { id: 'fonts', title: m.about_fonts_title() },
+    { id: 'contact', title: m.about_contact_title() },
+  ]
+
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 lg:py-14">
-      <h1 className="text-4xl font-bold tracking-tight">{m.about_title()}</h1>
-      <p className="mt-4 text-lg leading-relaxed text-base-content/75">
-        {m.about_lead()}
-      </p>
+    <div className="mx-auto flex max-w-5xl gap-12 px-4 py-10 lg:py-14">
+      <div className="min-w-0 max-w-3xl flex-1">
+        <h1 className="text-4xl font-bold tracking-tight">{m.about_title()}</h1>
+        <p className="mt-4 text-lg leading-relaxed text-base-content/75">
+          {m.about_lead()}
+        </p>
 
-      <div className="mt-10 flex flex-col gap-10">
-        <Section title={m.about_event_title()}>
-          <p>{m.about_event_body({ dates: m.event_dates() })}</p>
-          <p>
-            <ExternalLink href="https://dollweekend.cn/">
-              {m.footer_official_site()} ↗
-            </ExternalLink>
-          </p>
-        </Section>
+        <TocInline entries={toc} className="mt-8 lg:hidden" />
 
-        <Section title={m.about_source_title()}>
-          <p>{m.about_source_body({ count: n(data.total) })}</p>
-        </Section>
-
-        <Section title={m.about_sets_title()}>
-          <p>{m.about_sets_body()}</p>
-          <ul className="divide-y divide-base-300 rounded-box border border-base-300">
-            {data.sets.map(set => (
-              <li key={set.key}>
-                <Link
-                  to="/photos"
-                  search={{ set: set.key }}
-                  className="flex items-baseline gap-4 px-4 py-3 hover:bg-base-200"
-                >
-                  <span className="min-w-0 flex-1">
-                    <span className="block font-medium text-base-content">
-                      {setName(set.key)}
-                    </span>
-                    <span className="block text-sm text-base-content/60">
-                      {setDescription(set.key)}
-                    </span>
-                  </span>
-                  <span className="shrink-0 text-sm tabular-nums text-base-content/55">
-                    {m.photo_count({ count: set.count })}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </Section>
-
-        <Section title={m.about_times_title()}>
-          <p>
-            {m.about_times_body({
-              edited: n(data.edited),
-              upload: n(data.upload),
-            })}
-          </p>
-        </Section>
-
-        <Section id="downloads" title={m.about_downloads_title()}>
-          <p>{m.about_downloads_body()}</p>
-          <p>{m.about_files_body()}</p>
-          <p>
-            {/* Static asset (scripts/gen-files.ts), not a route */}
-            <a href="/files.json" className="link font-medium text-primary">
-              files.json
-            </a>
-          </p>
-          <p>{m.about_scripts_body({ size: gigabytes })}</p>
-          <ul className="flex flex-col gap-1">
-            {[
-              ['download.sh', m.about_scripts_sh()],
-              ['download.py', m.about_scripts_py()],
-            ].map(([file, note]) => (
-              <li key={file}>
-                <ExternalLink href={`${REPO_URL}/blob/main/examples/${file}`}>
-                  {file} ↗
-                </ExternalLink>{' '}
-                <span className="text-base-content/60">— {note}</span>
-              </li>
-            ))}
-          </ul>
-          <p>{m.about_scripts_flag()}</p>
-          <pre className="overflow-x-auto rounded-box bg-base-200 px-4 py-3 text-sm text-base-content">
-            <code>
-              {`./download.sh ${DOWNLOAD_FLAG}\npython3 download.py ${DOWNLOAD_FLAG}`}
-            </code>
-          </pre>
-        </Section>
-
-        <Section title={m.about_usage_title()}>
-          <p>{m.about_usage_body()}</p>
-          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            {data.photographers.map(p => (
-              <li key={p.id}>
-                <Link
-                  to="/photos"
-                  search={{ by: p.id }}
-                  className="font-medium text-base-content hover:text-primary"
-                >
-                  {p.name}
-                </Link>{' '}
-                <span className="tabular-nums text-base-content/55">
-                  {n(p.count)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Section>
-
-        <Section title={m.about_hosting_title()}>
-          <p>{m.about_hosting_body({ size: gigabytes })}</p>
-          <p>{m.about_billing_body()}</p>
-          <CostTable data={data} />
-          <p>{m.about_self_host_body()}</p>
-        </Section>
-
-        <Section title={m.about_code_title()}>
-          <p>{m.about_code_body()}</p>
-          <p>
-            <a
-              href={REPO_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-base-300 px-4 py-2 font-medium text-base-content transition-colors hover:border-primary hover:text-primary"
-            >
-              <GitHubIcon className="size-5" />
-              {REPO_URL.replace(/^https:\/\//, '')}
-            </a>
-          </p>
-        </Section>
-
-        <Section title={m.about_contact_title()}>
-          <p>{m.about_contact_body()}</p>
-          <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-6 gap-y-2">
-            <dt className="text-base-content/60">{m.about_contact_issues()}</dt>
-            <dd className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 break-words">
-              <ExternalLink href={`${REPO_URL}/issues`}>
-                {`${REPO_URL}/issues`.replace(/^https:\/\//, '')} ↗
+        <div className="mt-10 flex flex-col gap-10">
+          <Section id="event" title={m.about_event_title()}>
+            <p>{m.about_event_body({ dates: m.event_dates() })}</p>
+            <p>
+              <ExternalLink href="https://dollweekend.cn/">
+                {m.footer_official_site()} ↗
               </ExternalLink>
-              <span className="badge badge-sm badge-primary badge-soft">
-                {m.about_contact_preferred()}
-              </span>
-            </dd>
-            <dt className="text-base-content/60">{m.about_contact_email()}</dt>
-            <dd>
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
-                className="link font-medium text-primary"
-              >
-                {CONTACT_EMAIL}
+            </p>
+          </Section>
+
+          <Section id="source" title={m.about_source_title()}>
+            <p>{m.about_source_body({ count: n(data.total) })}</p>
+          </Section>
+
+          <Section id="sets" title={m.about_sets_title()}>
+            <p>{m.about_sets_body()}</p>
+            <ul className="divide-y divide-base-300 rounded-box border border-base-300">
+              {data.sets.map(set => (
+                <li key={set.key}>
+                  <Link
+                    to="/photos"
+                    search={{ set: set.key }}
+                    className="flex items-baseline gap-4 px-4 py-3 hover:bg-base-200"
+                  >
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-medium text-base-content">
+                        {setName(set.key)}
+                      </span>
+                      <span className="block text-sm text-base-content/60">
+                        {setDescription(set.key)}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-sm tabular-nums text-base-content/55">
+                      {m.photo_count({ count: set.count })}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Section>
+
+          <Section id="times" title={m.about_times_title()}>
+            <p>
+              {m.about_times_body({
+                edited: n(data.edited),
+                upload: n(data.upload),
+              })}
+            </p>
+          </Section>
+
+          <Section id="downloads" title={m.about_downloads_title()}>
+            <p>{m.about_downloads_body()}</p>
+            <p>{m.about_files_body()}</p>
+            <p>
+              {/* Static asset (scripts/gen-files.ts), not a route */}
+              <a href="/files.json" className="link font-medium text-primary">
+                files.json
               </a>
-            </dd>
-          </dl>
-        </Section>
+            </p>
+            <p>{m.about_scripts_body({ size: gigabytes })}</p>
+            <ul className="flex flex-col gap-1">
+              {[
+                ['download.sh', m.about_scripts_sh()],
+                ['download.py', m.about_scripts_py()],
+              ].map(([file, note]) => (
+                <li key={file}>
+                  <ExternalLink href={`${REPO_URL}/blob/main/examples/${file}`}>
+                    {file} ↗
+                  </ExternalLink>{' '}
+                  <span className="text-base-content/60">— {note}</span>
+                </li>
+              ))}
+            </ul>
+            <p>{m.about_scripts_flag()}</p>
+            <pre className="overflow-x-auto rounded-box bg-base-200 px-4 py-3 text-sm text-base-content">
+              <code>
+                {`./download.sh ${DOWNLOAD_FLAG}\npython3 download.py ${DOWNLOAD_FLAG}`}
+              </code>
+            </pre>
+          </Section>
+
+          <Section id="usage" title={m.about_usage_title()}>
+            <p>{m.about_usage_body()}</p>
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+              {data.photographers.map(p => (
+                <li key={p.id}>
+                  <Link
+                    to="/photos"
+                    search={{ by: p.id }}
+                    className="font-medium text-base-content hover:text-primary"
+                  >
+                    {p.name}
+                  </Link>{' '}
+                  <span className="tabular-nums text-base-content/55">
+                    {n(p.count)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Section>
+
+          <Section id="hosting" title={m.about_hosting_title()}>
+            <p>{m.about_hosting_body({ size: gigabytes })}</p>
+            <p>{m.about_billing_body()}</p>
+            <CostTable data={data} />
+            <p>{m.about_self_host_body()}</p>
+          </Section>
+
+          <Section id="code" title={m.about_code_title()}>
+            <p>{m.about_code_body()}</p>
+            <p>
+              <a
+                href={REPO_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-base-300 px-4 py-2 font-medium text-base-content transition-colors hover:border-primary hover:text-primary"
+              >
+                <GitHubIcon className="size-5" />
+                {REPO_URL.replace(/^https:\/\//, '')}
+              </a>
+            </p>
+          </Section>
+
+          <Section id="fonts" title={m.about_fonts_title()}>
+            {/* MiSans's license requires crediting the typeface */}
+            <p>{m.about_fonts_body()}</p>
+            <p>
+              <ExternalLink href="https://hyperos.mi.com/font/">
+                {m.about_fonts_link()} ↗
+              </ExternalLink>
+            </p>
+          </Section>
+
+          <Section id="contact" title={m.about_contact_title()}>
+            <p>{m.about_contact_body()}</p>
+            <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-6 gap-y-2">
+              <dt className="text-base-content/60">
+                {m.about_contact_issues()}
+              </dt>
+              <dd className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 break-words">
+                <ExternalLink href={`${REPO_URL}/issues`}>
+                  {`${REPO_URL}/issues`.replace(/^https:\/\//, '')} ↗
+                </ExternalLink>
+                <span className="badge badge-sm badge-primary badge-soft">
+                  {m.about_contact_preferred()}
+                </span>
+              </dd>
+              <dt className="text-base-content/60">
+                {m.about_contact_email()}
+              </dt>
+              <dd>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="link font-medium text-primary"
+                >
+                  {CONTACT_EMAIL}
+                </a>
+              </dd>
+            </dl>
+          </Section>
+        </div>
       </div>
+      <aside className="hidden w-52 shrink-0 lg:block">
+        <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
+          <TocSidebar entries={toc} />
+        </div>
+      </aside>
     </div>
   )
 }

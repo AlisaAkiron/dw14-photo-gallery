@@ -8,7 +8,7 @@
  *
  * The output is committed; rerun after changing the title or subtitle.
  * Text is drawn with the fonts installed on this machine (librsvg goes
- * through fontconfig), so MiSans, MiSans TC and Noto Sans CJK JP must be
+ * through fontconfig), so MiSans, MiSans TC and Noto Sans CJK JP / KR must be
  * installed — the same faces the site uses per language (see
  * src/styles/tailwind.css).
  */
@@ -28,13 +28,15 @@ const TEXT = '#1f1a1b'
 const RED = '#c8414c'
 
 // The title is Latin, so always MiSans; the subtitle's face follows the
-// language (MiSans would draw kanji in Chinese glyph forms)
+// language, matching the site (MiSans would draw kanji in Chinese glyph
+// forms and has no Hangul)
 const TITLE_FONT = 'MiSans'
 const SUBTITLE_FONTS: Record<string, string> = {
   en: 'MiSans',
   'zh-Hans': 'MiSans',
   'zh-Hant': 'MiSans TC',
   ja: 'Noto Sans CJK JP',
+  ko: 'Noto Sans CJK KR',
 }
 
 const { locales } = JSON.parse(
