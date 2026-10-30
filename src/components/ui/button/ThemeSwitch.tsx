@@ -185,8 +185,11 @@ export const ThemeSwitch = () => {
 
   return (
     <div className="dropdown dropdown-end">
-      <button
-        type="button"
+      {/* Not a <button>: iOS Safari never focuses buttons on tap, so the
+          focus-driven dropdown would not open (DaisyUI's Safari workaround) */}
+      <div
+        tabIndex={0}
+        role="button"
         className="btn btn-ghost btn-circle relative"
         aria-label={m.theme_toggle()}
         aria-haspopup="menu"
@@ -202,7 +205,7 @@ export const ThemeSwitch = () => {
             )}
           />
         ))}
-      </button>
+      </div>
       <ul
         // Keeps focus inside the dropdown when the padding area is clicked,
         // per DaisyUI's focus-based dropdown pattern

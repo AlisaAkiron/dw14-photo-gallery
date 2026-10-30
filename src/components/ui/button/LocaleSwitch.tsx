@@ -36,8 +36,11 @@ export const LocaleSwitch = () => {
 
   return (
     <div className="dropdown dropdown-end">
-      <button
-        type="button"
+      {/* Not a <button>: iOS Safari never focuses buttons on tap, so the
+          focus-driven dropdown would not open (DaisyUI's Safari workaround) */}
+      <div
+        tabIndex={0}
+        role="button"
         className="btn btn-ghost gap-1.5 px-2.5"
         aria-label={m.language_label()}
         aria-haspopup="menu"
@@ -47,7 +50,7 @@ export const LocaleSwitch = () => {
         <span className="hidden text-sm font-normal sm:inline">
           {LOCALE_NAMES[current]}
         </span>
-      </button>
+      </div>
       <ul
         tabIndex={0}
         role="menu"
