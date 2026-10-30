@@ -102,6 +102,8 @@
   "about_lead": "This site keeps every photo from Doll Weekend 14's official live photo album, so they stay available after the original album goes offline — and makes it easier to find the ones you're in.",
   "about_event_title": "The event",
   "about_event_body": "Doll Weekend 14 (DW 14) took place on {dates} at the Renaissance Huizhou Hotel in Huizhou, Guangdong. For the event itself, see the official Doll Weekend site.",
+  "about_event_listed": "This archive is made with the permission of the Doll Weekend staff, and the official DW 14 event page links to it as the event's official photo archive.",
+  "about_event_page_link": "DW 14 on the official site",
   "about_source_title": "Where the photos come from",
   "about_source_body": "All {count} photos were taken by the event's official photographers and published in its live photo album on alltuu. They were downloaded at full resolution and checked against the album's own counts; two exact duplicate uploads were left out.",
   "about_sets_title": "How the photos are organised",

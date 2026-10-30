@@ -93,6 +93,8 @@
   "about_lead": "このサイトは Doll Weekend 14 公式フォトライブの全写真を保存し、元のアルバムの公開終了後も見られるようにしたものです。自分が写っている写真も探しやすくなっています。",
   "about_event_title": "イベントについて",
   "about_event_body": "Doll Weekend 14（DW 14）は {dates}、中国広東省恵州のルネッサンス恵州ホテルで開催されました。イベントそのものについては Doll Weekend 公式サイトをご覧ください。",
+  "about_event_listed": "このアーカイブは Doll Weekend 運営スタッフの許可を得て制作しており、公式サイトの DW 14 イベントページに公式写真アーカイブとして掲載されています。",
+  "about_event_page_link": "公式サイトの DW 14 ページ",
   "about_source_title": "写真の出典",
   "about_source_body": "全 {count} 枚の写真は、イベント公式カメラマンが撮影し、alltuu のフォトライブアルバムで公開したものです。元の解像度でダウンロードし、アルバム側の枚数と照合済みです。完全に重複したアップロード 2 枚は除外しています。",
   "about_sets_title": "写真の分類について",

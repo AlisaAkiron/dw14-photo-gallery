@@ -217,9 +217,13 @@ export const AboutPage = ({ data }: { data: AboutData }) => {
         <div className="mt-10 flex flex-col gap-10">
           <Section id="event" title={m.about_event_title()}>
             <p>{m.about_event_body({ dates: m.event_dates() })}</p>
-            <p>
+            <p>{m.about_event_listed()}</p>
+            <p className="flex flex-wrap gap-x-6 gap-y-2">
               <ExternalLink href="https://dollweekend.cn/">
                 {m.footer_official_site()} ↗
+              </ExternalLink>
+              <ExternalLink href="https://dollweekend.cn/event/dw14">
+                {m.about_event_page_link()} ↗
               </ExternalLink>
             </p>
           </Section>
