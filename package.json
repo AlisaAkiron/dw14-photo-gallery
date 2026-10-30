@@ -19,10 +19,10 @@
     "restore": "node scripts/restore-archive.ts"
   },
   "dependencies": {
-    "@mantine/hooks": "^9.7.3",
-    "@tanstack/react-router": "^1.170.45",
-    "@tanstack/react-start": "^1.169.3",
-    "@tanstack/react-virtual": "^3.14.21",
+    "@mantine/hooks": "^9.7.4",
+    "@tanstack/react-router": "^1.170.46",
+    "@tanstack/react-start": "^1.169.4",
+    "@tanstack/react-virtual": "^3.14.24",
     "clsx": "^2.1.1",
     "misans": "^5.0.0",
     "react": "^19.3.1",
@@ -30,23 +30,23 @@
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.64.0",
-    "@inlang/paraglide-js": "^2.29.1",
+    "@cloudflare/vite-plugin": "^1.66.0",
+    "@inlang/paraglide-js": "^2.29.3",
     "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "^26.6.5",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "daisyui": "^5.7.50",
-    "oxfmt": "^0.74.0",
-    "oxlint": "^1.89.0",
-    "postcss": "^8.5.31",
+    "oxfmt": "^0.75.0",
+    "oxlint": "^1.90.0",
+    "postcss": "^8.5.32",
     "react-scan": "^0.5.7",
     "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
-    "vite": "^8.3.4",
-    "wrangler": "^4.151.3"
+    "vite": "^8.3.5",
+    "wrangler": "^4.155.0"
   },
   "packageManager": "pnpm@12.11.2"
 }
